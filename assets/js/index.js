@@ -38,7 +38,7 @@ function showQuestion() {
   q.answers.forEach((answer, i) => {
     // Добавляем радиокнопку для каждого ответа с его значением (баллом)
     quizContainer.innerHTML += `<label>
-          <input type='radio' name='answer' value='${q.scores[i]}'> ${answer}
+          <input type='radio' class="w-5 h-5 text-blue-500 focus:ring-blue-400" name='answer' value='${q.scores[i]}'> ${answer}
       </label><br><br>`;
   });
 }
