@@ -1,5 +1,3 @@
-
-
 const gameMusic = document.querySelector(".gameMusic");
 gameMusic.volume = 0.5; // Громкость музыки
 
@@ -39,7 +37,7 @@ function showQuestion() {
     // Добавляем радиокнопку для каждого ответа с его значением (баллом)
     quizContainer.innerHTML += `<label>
           <input type='radio' class="w-5 h-5 text-blue-500 focus:ring-blue-400" name='answer' value='${q.scores[i]}'> ${answer}
-      </label><br><br>`;
+      </label>`;
   });
 }
 
@@ -59,28 +57,27 @@ function nextQuestion() {
     }
   }
 }
-
 // Функция для показа итогового результата теста
 function showResult() {
   // Определяем результат в зависимости от количества набранных баллов
   let resultText =
-    score >= 40
-      ? "Ты очень любишь свою маму! Можно телефон на час"
-      : score >= 30
-      ? "Ты любишь маму, но иногда забываешь об этом. Можно телефон по разрешении мамы."
-      : score >= 15
-      ? "Ты мог бы быть внимательнее к маме. Телефон нельзя."
-      : "Попробуй больше заботиться о маме. Забудь о телефоне на неделю";
+    score >= questions.length * 3.5
+      ? answer[0]
+      : score >= questions.length * 2.5
+      ? answer[1]
+      : score >= questions.length * 1.5
+      ? answer[2]
+      : answer[3];
 
   // Выводим результат на экран
   quizContainer.innerHTML = `<p class='result'>${resultText}</p>`;
 
   // Изменяем текст кнопки на "Пройти тест еще раз"
   nextButton.textContent = "Пройти тест еще раз";
-  
+
   // Убираем обработчик для перехода к следующему вопросу
   nextButton.removeEventListener("click", nextQuestion);
-  
+
   // Добавляем обработчик для сброса теста
   nextButton.addEventListener("click", resetTest);
 }
@@ -91,10 +88,10 @@ function resetTest() {
   currentQuestion = 0;
   nextButton.textContent = "Ответить";
   showQuestion();
-  
+
   // Убираем обработчик для сброса теста
   nextButton.removeEventListener("click", resetTest);
-  
+
   // Восстанавливаем обработчик для "Следующего вопроса"
   nextButton.addEventListener("click", nextQuestion);
 }
