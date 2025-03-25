@@ -24,62 +24,82 @@ const quizContainer = document.querySelector(".quiz");
 const nextButton = document.querySelector(".nextButton");
 nextButton.addEventListener("click", nextQuestion);
 
+const shuffleAnswers = (question) => {
+  // Сохраняем ответы и баллы в массив объектов
+  const answersWithScores = question.answers.map((answer, index) => ({
+    answer,
+    score: question.scores[index]
+  }));
+  
+  // Перемешиваем ответы и их баллы
+  answersWithScores.sort(() => Math.random() - 0.5);
+  
+  // Обновляем вопрос с перемешанными ответами и баллами
+  question.answers = answersWithScores.map(item => item.answer);
+  question.scores = answersWithScores.map(item => item.score);
+};
+
 // Функция для отображения текущего вопроса
 function showQuestion() {
-  // Получаем текущий вопрос из массива questions
+  // Выводим текущий вопрос в консоль
+  console.log('Текущий вопрос:', questions[currentQuestion]);
+  
   const q = questions[currentQuestion];
-
-  // Заполняем контейнер текстом вопроса
+  shuffleAnswers(q);
+  
   quizContainer.innerHTML = `<p>${q.text}</p>`;
 
-  // Перебираем все возможные ответы на вопрос
   q.answers.forEach((answer, i) => {
-    // Добавляем радиокнопку для каждого ответа с его значением (баллом)
     quizContainer.innerHTML += `<label>
-          <input type='radio' class="w-5 h-5 text-blue-500 focus:ring-blue-400" name='answer' value='${q.scores[i]}'> ${answer}
-      </label>`;
+      <input type='radio' class="w-5 h-5 text-blue-500 focus:ring-blue-400" name='answer' value='${q.scores[i]}'> ${answer}
+    </label><br>`;
   });
 }
 
+
 // Функция обработки ответа и перехода к следующему вопросу
 function nextQuestion() {
-  startMusic(); // Запускаем музыку при первом нажатии
+  console.log('Переходим к следующему вопросу...');
 
   const selected = document.querySelector("input[name='answer']:checked");
   if (selected) {
-    score += parseInt(selected.value);
-    currentQuestion++;
+    score += parseInt(selected.value); // Добавляем баллы
+    currentQuestion++; // Переходим к следующему вопросу
 
+    console.log('Текущий вопрос:', currentQuestion);
+    
     if (currentQuestion < questions.length) {
-      showQuestion();
+      showQuestion(); // Показываем следующий вопрос
     } else {
-      showResult();
+      console.log('Последний вопрос, показываем результат.');
+      showResult(); // Если это последний вопрос, показываем результат
     }
   }
 }
+
+
+
 // Функция для показа итогового результата теста
 function showResult() {
-  // Определяем результат в зависимости от количества набранных баллов
-  let resultText =
-    score >= questions.length * 3.5
-      ? answer[0]
-      : score >= questions.length * 2.5
-      ? answer[1]
-      : score >= questions.length * 1.5
-      ? answer[2]
-      : answer[3];
+  console.log('Результат теста...');
 
-  // Выводим результат на экран
+  let resultText =
+    score >= questions.length * 3
+      ? answers[0]
+      : score >= questions.length * 2
+      ? answers[1]
+      : score >= questions.length * 1
+      ? answers[2]
+      : answers[3];
+
   quizContainer.innerHTML = `<p class='result'>${resultText}</p>`;
 
-  // Изменяем текст кнопки на "Пройти тест еще раз"
+  // Изменяем текст кнопки
   nextButton.textContent = "Пройти тест еще раз";
-
-  // Убираем обработчик для перехода к следующему вопросу
   nextButton.removeEventListener("click", nextQuestion);
-
-  // Добавляем обработчик для сброса теста
   nextButton.addEventListener("click", resetTest);
+
+  console.log('Результат показан, обработчик кнопки добавлен.');
 }
 
 // Функция для сброса теста
