@@ -37,19 +37,6 @@ body {
 }
 
 
-
-
-input[type="radio"] {
-  transform: scale(1.5); /* Увеличивает радиокнопки */
-  margin: 10px; /* Добавляем отступы между радиокнопками */
-}
-
-/* Дополнительные стили для лейблов, чтобы они выглядели лучше */
-label {
-  display: block;
-  font-size: 26px;
-  margin: 5px 0;
-}
 p {
   font-size: 26px;
   margin: 5px 0;
